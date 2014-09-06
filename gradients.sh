@@ -1,16 +1,20 @@
 #!/bin/bash
 # create gradients from json source
 
+# depends on: convert parallel
+
+# variables
+OUTPUTDIR="./Gradients" # output directory
+DIMENSION="1680x1050"   # widthxheight
+
 # create output dir
-mkdir -p ./Gradients
+mkdir -p "$OUTPUTDIR"
 
-# get colours and names
-COLOURS=$(cat gradients.json |  jq '.[] | .colour1 + " " + .colour2 + " " + .name')
-for i in "${COLOURS[@]}";do
-  echo $i
-done
-
-# create Gradients
-
-# convert -size 1050x1680 gradient:yellow-green -rotate -90 output.png; open output.png
-
+# get colours and names, clean'm, loop'm, echo'm
+while read -r line; do
+  # create variables
+  GRADIENT="$(echo "$line" | awk '{print $1 "-" $2}')"
+  NAME="$(echo "$line" | cut -d " " -f 3-)"
+  # command
+  echo "convert -size "$DIMENSION" gradient:\"$GRADIENT\" ./Gradients/\"${NAME}.png\""
+done <<< "$(cat gradients.json |  jq '.[] | .colour1 + " " + .colour2 + " " + .name' | sed 's/\"//g')" | parallel
