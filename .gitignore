@@ -1,6 +1,7 @@
 # git will ignore these files
 
 # ignore the output directory
+Output*/
 
 # Compiled source #
 ###################
