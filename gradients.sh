@@ -1,7 +1,8 @@
 #!/bin/bash
 # create gradients from json source
 
-# depends on: convert parallel
+# depends on: convert parallel jq
+# brew install imagemagick parallel jq
 
 # variables
 OUTPUTDIR="./Output-Gradients" # output directory # .gitignore this
@@ -29,7 +30,6 @@ while read -r line; do
   mkdir -p "$iPhone4OUTPUTDIR" && echo "convert -size "${iPhone4WIDTH}x${iPhone4HEIGHT}" gradient:\"$GRADIENT\" "$iPhone4OUTPUTDIR"/\""${NAME}".png\""
   # radial
   # mkdir -p "$OUTPUTDIR" && echo "convert -size "${WIDTH}x${HEIGHT}" radial-gradient:\"$GRADIENT\" "$OUTPUTDIR"/\""${NAME}"-vertical.png\""
-
 done <<< "$(curl https://raw.githubusercontent.com/Ghosh/uiGradients/master/gradients.json | \
             jq '.[] | .colour1 + " " + .colour2 + " " + .name' | \
             sed 's/\"//g')" | \
