@@ -25,11 +25,21 @@ while read -r line; do
   # horizontal
   mkdir -p "$OUTPUTDIR" && echo "convert -size "${HEIGHT}x${WIDTH}" gradient:\"$GRADIENT\" -rotate -90 "$OUTPUTDIR"/\""${NAME}"-horizontal.png\""
   # iPhone 5
-  mkdir -p "$iPhone5OUTPUTDIR" && echo "convert -size "${iPhone5WIDTH}x${iPhone5HEIGHT}" gradient:\"$GRADIENT\" "$iPhone5OUTPUTDIR"/\""${NAME}".png\""
+  FILENAME="$iPhone5OUTPUTDIR""/""${NAME}"".png"
+  if [ -f "$FILENAME" ]; then
+    echo "echo \"Already exists: $FILENAME\""
+  else
+    echo "echo \"Creating: $FILENAME\""
+    echo "mkdir -p \"$iPhone5OUTPUTDIR\" && convert -size \"${iPhone5WIDTH}x${iPhone5HEIGHT}\" gradient:\"$GRADIENT\" \"$FILENAME\" "
+  fi
   # iPhone 4
-  mkdir -p "$iPhone4OUTPUTDIR" && echo "convert -size "${iPhone4WIDTH}x${iPhone4HEIGHT}" gradient:\"$GRADIENT\" "$iPhone4OUTPUTDIR"/\""${NAME}".png\""
-  # radial
-  # mkdir -p "$OUTPUTDIR" && echo "convert -size "${WIDTH}x${HEIGHT}" radial-gradient:\"$GRADIENT\" "$OUTPUTDIR"/\""${NAME}"-vertical.png\""
+  FILENAME="$iPhone4OUTPUTDIR""/""${NAME}"".png"
+  if [ -f "$FILENAME" ]; then
+    echo "echo \"Already exists: $FILENAME\""
+  else
+    echo "echo \"Creating: $FILENAME\""
+    echo "mkdir -p \"$iPhone5OUTPUTDIR\" && convert -size \"${iPhone5WIDTH}x${iPhone5HEIGHT}\" gradient:\"$GRADIENT\" \"$FILENAME\" "
+  fi
 done <<< "$(curl https://raw.githubusercontent.com/Ghosh/uiGradients/master/gradients.json | \
             jq '.[] | .colour1 + " " + .colour2 + " " + .name' | \
             sed 's/\"//g')" | \
