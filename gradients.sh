@@ -5,7 +5,6 @@
 # depends on: convert jq parallel
 # brew install imagemagick parallel jq
 
-
 # get colours and names from the source
 # convert the json to a bash readable input (#348F50 #56B4D3 Emerald Water)
 # loop through each gradient and use convert (ImageMagick) to create a PNG
