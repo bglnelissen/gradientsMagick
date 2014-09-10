@@ -10,6 +10,7 @@
 # loop through each gradient and use convert (ImageMagick) to create a PNG
 # Rotate -90 to create a nice horizontal gradient
 
+# by default, the commands are printed to stdout
 # use as:
 # ./gradients.sh | parallel
 
