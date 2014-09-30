@@ -18,20 +18,13 @@
 OUTPUTDIR="./Output-Gradients" # output directory, .gitignore this
 WIDTH="2560"   # rMBP-13
 HEIGHT="1600"
-<<<<<<< HEAD
 OPTIONS="-size \"${HEIGHT}x${WIDTH}\"  -rotate 90"
 # OUTPUTDIR="./Output-Gradients-iPhone5" # iPhone 5
 # WIDTH="640" 
 # HEIGHT="1136"
 # OPTIONS="-size \"${WIDTH}x${HEIGHT}\" "
-=======
-OUTPUTDIR="./Output-Gradients-iPhone5" # iPhone 5
-WIDTH="640" 
-HEIGHT="1136"
-# OUTPUTDIR="./Output-Gradients" # iPhone 4
-# WIDTH="640" 
-# HEIGHT="960"
->>>>>>> FETCH_HEAD
+
+
 
 mkdir -p "$OUTPUTDIR"
 # fetch json from repo and loop through gradients
