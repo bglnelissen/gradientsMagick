@@ -18,6 +18,7 @@
 OUTPUTDIR="./Output-Gradients" # output directory, .gitignore this
 WIDTH="2560"   # rMBP-13
 HEIGHT="1600"
+<<<<<<< HEAD
 OPTIONS="-size \"${HEIGHT}x${WIDTH}\" -rotate 90 "
 OUTPUTDIR="./Output-Gradients-iPhone5" # iPhone 5
 WIDTH="640" 
@@ -27,7 +28,17 @@ OPTIONS="-size \"${WIDTH}x${HEIGHT}\" "
 # WIDTH="640" 
 # HEIGHT="960"
 OPTIONS="-size \"${WIDTH}x${HEIGHT}\" "
+=======
+OPTIONS="-size \"${HEIGHT}x${WIDTH}\"  -rotate 90"
+# OUTPUTDIR="./Output-Gradients-iPhone5" # iPhone 5
+# WIDTH="640" 
+# HEIGHT="1136"
+# OPTIONS="-size \"${WIDTH}x${HEIGHT}\" "
+>>>>>>> FETCH_HEAD
 
+
+
+mkdir -p "$OUTPUTDIR"
 # fetch json from repo and loop through gradients
 while read -r line; do
   if [ -n "$line" ]; then
@@ -37,7 +48,11 @@ while read -r line; do
     # Let's roll
     FILENAME="$OUTPUTDIR""/""${NAME}"".png"
     if [ ! -f "$FILENAME" ]; then
+<<<<<<< HEAD
       echo "mkdir -p \"$OUTPUTDIR\" && convert "$OPTIONS" gradient:\"$GRADIENT\" \"$FILENAME\" "
+=======
+      echo "mkdir -p \"$OUTPUTDIR\" && convert $OPTIONS gradient:\"$GRADIENT\" \"$FILENAME\" "
+>>>>>>> FETCH_HEAD
     fi
   else
     echo "No valid input"
