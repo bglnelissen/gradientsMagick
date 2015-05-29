@@ -18,27 +18,41 @@
 OUTPUTDIR="./Output-Gradients" # output directory, .gitignore this
 WIDTH="2560"   # rMBP-13
 HEIGHT="1600"
-OPTIONS="-size \"${HEIGHT}x${WIDTH}\" -rotate 90 "
+OPTIONS=" -size \"${HEIGHT}x${WIDTH}\" -rotate 90 "
+
+# morf movements by raster size (larger the number, the more chance of movement, but movements can be small)
+A=8
+B=8
+C=8
 
 # OUTPUTDIR="./Output-Gradients-iPhone5" # iPhone 5
 # WIDTH="640" 
 # HEIGHT="1136"
 # OPTIONS="-size \"${WIDTH}x${HEIGHT}\" "
 
-
-
+# Dimensions
+# WIDTH=$(identify -ping -format '%W' "$IN" )
+# HEIGHT=$(identify -ping -format '%H' "$IN" )
 
 mkdir -p "$OUTPUTDIR"
 # fetch json from repo and loop through gradients
 while read -r line; do
   if [ -n "$line" ]; then
     # create variables
+    ASTART="$(((WIDTH/A) * $(( ( RANDOM % A ) + 1 )) ))"",""$(((HEIGHT/A) * $(( ( RANDOM % A ) + 1 )) ))"
+    ASTOP="$(((WIDTH/A) *  $(( ( RANDOM % A ) + 1 )) ))"",""$(((HEIGHT/A) * $(( ( RANDOM % A ) + 1 )) ))"
+    BSTART="$(((WIDTH/B) * $(( ( RANDOM % B ) + 1 )) ))"",""$(((HEIGHT/B) * $(( ( RANDOM % B ) + 1 )) ))"
+    BSTOP="$(((WIDTH/B) *  $(( ( RANDOM % B ) + 1 )) ))"",""$(((HEIGHT/B) * $(( ( RANDOM % B ) + 1 )) ))"
+    CSTART="$(((WIDTH/C) * $(( ( RANDOM % C ) + 1 )) ))"",""$(((HEIGHT/C) * $(( ( RANDOM % C ) + 1 )) ))"
+    CSTOP="$(((WIDTH/C) *  $(( ( RANDOM % C ) + 1 )) ))"",""$(((HEIGHT/C) * $(( ( RANDOM % C ) + 1 )) ))"
+    MORFCOMMAND=" -distort Shepards \" $ASTART $ASTOP $BSTART $BSTOP  $CSTART $CSTOP \" "
     GRADIENT="$(echo "$line" | awk '{print $1 "-" $2}')"
     NAME="$(echo "$line" | cut -d " " -f 3-)"
     # Let's roll
     FILENAME="$OUTPUTDIR""/""${NAME}"".png"
     if [ ! -f "$FILENAME" ]; then
-      echo "mkdir -p \"$OUTPUTDIR\" && convert "$OPTIONS" gradient:\"$GRADIENT\" \"$FILENAME\" "
+      echo "mkdir -p \"$OUTPUTDIR\" && convert "$OPTIONS" gradient:\"$GRADIENT\" "$MORFCOMMAND" \"$FILENAME\" "
+      
     fi
   else
     echo "No valid input"
@@ -47,3 +61,5 @@ while read -r line; do
 done <<< "$(curl https://raw.githubusercontent.com/Ghosh/uiGradients/master/gradients.json | \
             jq '.[] | .colour1 + " " + .colour2 + " " + .name' | \
             sed 's/\"//g')"
+            
+echo "# ./gradients.sh | parallel"
