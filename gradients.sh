@@ -14,31 +14,31 @@
 # use as:
 # ./gradients.sh | parallel
 
-# variables
+# MBPr 13 inch
 OUTPUTDIR="./Output-Gradients" # output directory, .gitignore this
 WIDTH="2560"   # rMBP-13
 HEIGHT="1600"
 OPTIONS=" -size \"${HEIGHT}x${WIDTH}\" -rotate 90 "
+
+# iPhone
+# OUTPUTDIR="./Output-Gradients-iPhone5" # iPhone 5
+# WIDTH="640" 
+# HEIGHT="1136"
+# OPTIONS="-size \"${WIDTH}x${HEIGHT}\" "
 
 # morf movements by raster size (larger the number, the more chance of movement, but movements can be small)
 A=8
 B=8
 C=8
 
-# OUTPUTDIR="./Output-Gradients-iPhone5" # iPhone 5
-# WIDTH="640" 
-# HEIGHT="1136"
-# OPTIONS="-size \"${WIDTH}x${HEIGHT}\" "
-
-# Dimensions
-# WIDTH=$(identify -ping -format '%W' "$IN" )
-# HEIGHT=$(identify -ping -format '%H' "$IN" )
-
 mkdir -p "$OUTPUTDIR"
 # fetch json from repo and loop through gradients
 while read -r line; do
   if [ -n "$line" ]; then
     # create variables
+    # Dimensions
+    # WIDTH=$(identify -ping -format '%W' "$IN" )
+    # HEIGHT=$(identify -ping -format '%H' "$IN" )
     ASTART="$(((WIDTH/A) * $(( ( RANDOM % A ) + 1 )) ))"",""$(((HEIGHT/A) * $(( ( RANDOM % A ) + 1 )) ))"
     ASTOP="$(((WIDTH/A) *  $(( ( RANDOM % A ) + 1 )) ))"",""$(((HEIGHT/A) * $(( ( RANDOM % A ) + 1 )) ))"
     BSTART="$(((WIDTH/B) * $(( ( RANDOM % B ) + 1 )) ))"",""$(((HEIGHT/B) * $(( ( RANDOM % B ) + 1 )) ))"
@@ -46,12 +46,14 @@ while read -r line; do
     CSTART="$(((WIDTH/C) * $(( ( RANDOM % C ) + 1 )) ))"",""$(((HEIGHT/C) * $(( ( RANDOM % C ) + 1 )) ))"
     CSTOP="$(((WIDTH/C) *  $(( ( RANDOM % C ) + 1 )) ))"",""$(((HEIGHT/C) * $(( ( RANDOM % C ) + 1 )) ))"
     MORFCOMMAND=" -distort Shepards \" $ASTART $ASTOP $BSTART $BSTOP  $CSTART $CSTOP \" "
+    DUSTYCOMMAND=" \( "$OPTIONS" xc: +noise Random -channel G -threshold 1% -separate +channel -transparent white -negate \) -compose Overlay -composite "
+    
     GRADIENT="$(echo "$line" | awk '{print $1 "-" $2}')"
     NAME="$(echo "$line" | cut -d " " -f 3-)"
     # Let's roll
     FILENAME="$OUTPUTDIR""/""${NAME}"".png"
     if [ ! -f "$FILENAME" ]; then
-      echo "mkdir -p \"$OUTPUTDIR\" && convert "$OPTIONS" gradient:\"$GRADIENT\" "$MORFCOMMAND" \"$FILENAME\" "
+      echo "mkdir -p \"$OUTPUTDIR\" && convert "$OPTIONS" gradient:\"$GRADIENT\" "$MORFCOMMAND" "$DUSTYCOMMAND" \"$FILENAME\" "
       
     fi
   else
